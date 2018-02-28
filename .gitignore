@@ -1,0 +1,5 @@
+# Elm Ignore
+elm-stuff/
+
+# Node Ignore
+node_modules
