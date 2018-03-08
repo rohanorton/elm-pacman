@@ -5,6 +5,8 @@ import Direction exposing (Direction(Left, Right, Up, Down))
 import Pacman exposing (Pacman)
 import Position
 import Square exposing (Square)
+import Svg as S exposing (Svg)
+import Svg.Attributes as A
 
 
 type Colour
@@ -32,7 +34,7 @@ type alias Ghost =
 
 inky : Entity Ghost
 inky =
-    { position = Position.fromSquare { x = 15, y = 21 }
+    { position = Position.fromSquare { x = 14, y = 20 }
     , speed = 0.75
     , direction = Left
     , colour = LightBlue
@@ -42,7 +44,7 @@ inky =
 
 blinky : Entity Ghost
 blinky =
-    { position = Position.fromSquare { x = 15, y = 21 }
+    { position = Position.fromSquare { x = 13, y = 22 }
     , speed = 0.75
     , direction = Left
     , colour = Red
@@ -52,7 +54,7 @@ blinky =
 
 pinky : Entity Ghost
 pinky =
-    { position = Position.fromSquare { x = 15, y = 21 }
+    { position = Position.fromSquare { x = 12, y = 11 }
     , speed = 0.75
     , direction = Left
     , colour = Pink
@@ -62,7 +64,7 @@ pinky =
 
 clyde : Entity Ghost
 clyde =
-    { position = Position.fromSquare { x = 15, y = 21 }
+    { position = Position.fromSquare { x = 10, y = 13 }
     , speed = 0.75
     , direction = Left
     , colour = Orange
@@ -169,3 +171,42 @@ chaseTargetClyde pacman clyde =
             pacmanSquare
         else
             clyde.homeTarget
+
+
+toHex : Colour -> String
+toHex colour =
+    case colour of
+        Red ->
+            "#d03e19"
+
+        Pink ->
+            "#ea82e5"
+
+        LightBlue ->
+            "#46bfee"
+
+        Orange ->
+            "#db851c"
+
+
+svg : Entity Ghost -> Svg msg
+svg ghost =
+    let
+        colour =
+            toHex ghost.colour
+    in
+        S.svg
+            [ A.viewBox "0 0 200 200"
+            , A.preserveAspectRatio "xMinYMin meet"
+            , A.width "10"
+            , A.x <| toString <| Position.getX ghost.position
+            , A.y <| toString <| Position.getY ghost.position
+            ]
+            [ S.circle
+                [ A.style <| "fill:" ++ colour
+                , A.cx "100"
+                , A.cy "100"
+                , A.r "100"
+                ]
+                []
+            ]

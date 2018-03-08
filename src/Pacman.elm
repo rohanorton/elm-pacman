@@ -57,18 +57,22 @@ svg pacman =
 
                 Up ->
                     "270"
+
+        yellow =
+            "#fdff00"
     in
         S.svg
-            [ A.viewBox "0 0 570 570"
+            [ A.viewBox "0 0 200 200"
             , A.preserveAspectRatio "xMinYMin meet"
-            , A.transform <| "rotate(" ++ rotate ++ ")"
             , A.width "10"
             , A.x <| toString <| Position.getX pacman.position
             , A.y <| toString <| Position.getY pacman.position
             ]
-            [ S.path
-                [ A.style "fill:#ffcc00"
-                , A.d "M535.441,412.339A280.868,280.868 0 1,1 536.186,161.733L284.493,286.29Z"
+            [ S.circle
+                [ A.style <| "fill:" ++ yellow
+                , A.cx "100"
+                , A.cy "100"
+                , A.r "100"
                 ]
                 []
             ]

@@ -6,6 +6,7 @@ import Html as H exposing (Html)
 import Html.Attributes as A
 import Game exposing (Game)
 import Pacman
+import Ghost
 import Maze
 import Svg
 
@@ -74,16 +75,21 @@ view : Model -> Html msg
 view { game, keycode } =
     Svg.svg
         [ A.attribute "namespace" "http://www.w3.org/2000/svg"
-        , A.style [ ( "width", "100%" ), ( "height", "100%" ) ]
+        , A.style
+            [ ( "width", "100%" )
+            , ( "height", "100%" )
+
+            -- , ( "background-color", "black" )
+            ]
         ]
         [ Maze.svg game.maze
             [ Pacman.svg game.pacman
+            , Ghost.svg game.blinky
+            , Ghost.svg game.pinky
+            , Ghost.svg game.inky
+            , Ghost.svg game.clyde
 
-            -- Ghost.svg game.blinky,
-            -- Ghost.svg game.pinky,
-            -- Ghost.svg game.inky,
-            -- Ghost.svg game.clyde,
             --
-            -- Bonus.srv game.currentBonus
+            -- , Bonus.svg game.currentBonus
             ]
         ]

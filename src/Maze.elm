@@ -146,11 +146,91 @@ simpleCellView cell =
                 simpleCellView c
 
 
+square : Square -> Svg a
+square square =
+    Debug.crash "TODO"
+
+
 svg : Maze -> List (Svg a) -> Svg a
-svg _ children =
-    Svg.svg
-        [ SvgA.height "600", SvgA.width "600" ]
-        children
+svg (Maze maze) children =
+    let
+        ( _, _, svgCells ) =
+            maze
+                |> Array.foldl svgRow ( 0, 0, [] )
+    in
+        Svg.svg
+            [ SvgA.height "600"
+            , SvgA.width "600"
+
+            -- , SvgA.viewBox "0 0 900 900"
+            ]
+            (svgCells ++ children)
+
+
+svgRow : Array Cell -> ( Int, Int, List (Svg msg) ) -> ( Int, Int, List (Svg msg) )
+svgRow cells ( x, y, els ) =
+    cells
+        |> Array.foldr (\cell ( x_, y_, els_ ) -> ( x_ + 1, y_, svgSquare cell x_ y_ :: els_ )) ( 0, y + 1, els )
+
+
+empty : Svg msg
+empty =
+    Svg.text ""
+
+
+energizer : Svg msg
+energizer =
+    Svg.g [ SvgA.color "white" ]
+        [ Svg.text "•"
+        ]
+
+
+pill : Svg msg
+pill =
+    Svg.g [ SvgA.color "white" ]
+        [ Svg.text "·"
+        ]
+
+
+svgCellContent : Cell -> ( String, Svg msg )
+svgCellContent cell =
+    case cell of
+        Empty ->
+            ( "black", empty )
+
+        Pill ->
+            ( "black", pill )
+
+        Wall ->
+            ( "blue", empty )
+
+        Energizer ->
+            ( "black", energizer )
+
+        Decision c ->
+            svgCellContent c
+
+
+svgSquare : Cell -> Int -> Int -> Svg msg
+svgSquare cell x y =
+    let
+        ( colour, child ) =
+            svgCellContent cell
+    in
+        Svg.svg
+            [ SvgA.viewBox "0 0 200 200"
+            , SvgA.preserveAspectRatio "xMinYMin meet"
+            , SvgA.width "10"
+            , SvgA.x <| toString <| x * 10
+            , SvgA.y <| toString <| y * 10
+            ]
+            [ Svg.rect
+                [ SvgA.style <| "fill:" ++ colour
+                , SvgA.width "200"
+                , SvgA.height "200"
+                ]
+                [ child ]
+            ]
 
 
 
@@ -188,27 +268,5 @@ getDown { x, y } =
 
 
 generateSvg : Maze -> Svg a
-generateSvg maze =
-    Svg.text "oh"
-
-
-
---
--- cornerTopLeft : Svg a
--- cornerTopLeft =
---     Debug.crash "TODO"
---
---
--- cornerBottomLeft : Svg a
--- cornerBottomLeft =
---     Debug.crash "TODO"
---
---
--- cornerTopRight : Svg a
--- cornerTopRight =
---     Debug.crash "TODO"
---
---
--- cornerBottomRight : Svg a
--- cornerBottomRight =
---     Debug.crash "TODO"
+generateSvg (Maze maze) =
+    Svg.text "ohj"
